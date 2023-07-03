@@ -1,0 +1,25 @@
+{
+	"git": {
+		"commit": true,
+		"commitMessage": "chore(release): v${version}",
+		"push": true,
+		"tag": true,
+		"tagName": "v${version}"
+	},
+	"github": {
+		"release": true
+	},
+	"hooks": {
+		"before:init": "npm run docs:update && npm run schemas:update && git add ./README.md ./docs/rules ./src/*.schema.json"
+	},
+	"npm": {
+		"publish": true
+	},
+	"plugins": {
+		"@release-it/conventional-changelog": {
+			"header": "# Changelog",
+			"infile": "CHANGELOG.md",
+			"preset": "angular"
+		}
+	}
+}
