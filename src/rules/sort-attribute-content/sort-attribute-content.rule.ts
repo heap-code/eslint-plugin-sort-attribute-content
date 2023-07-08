@@ -1,3 +1,5 @@
+import { type TmplAstTextAttribute } from "@angular/compiler";
+import { type TemplateParserServices } from "@angular-eslint/utils";
 import { AttributeNode, AttributeValueNode, TokenTypes } from "es-html-parser";
 import { Rule } from "eslint";
 
@@ -147,11 +149,30 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			}
 		}
 
-		// if (isAngularParser) {
-		// 	const { convertNodeSourceSpanToLoc } = context.parserServices as TemplateParserServices;
-		//
-		// 	// TODO: angular-parser
-		// }
+		// TODO: a better way to determine the parser?
+		if (context.parserPath.includes("@angular-eslint/template-parser")) {
+			const { convertNodeSourceSpanToLoc } = context.parserServices as TemplateParserServices;
+
+			return Object.fromEntries(
+				ruleOptions.map(({ attributes, ...option }) => [
+					`TextAttribute[name=/^(${attributes.join("|")})$/]`,
+					(nodeRaw: Rule.Node) => {
+						const { name, value, valueSpan } =
+							nodeRaw as unknown as TmplAstTextAttribute;
+						if (!valueSpan) {
+							// Attribute without value. ex: `<button disabled></button>
+							return;
+						}
+
+						checkRule(value, option, {
+							attribute: name,
+							loc: convertNodeSourceSpanToLoc(valueSpan),
+							range: [valueSpan.start.offset, valueSpan.end.offset]
+						});
+					}
+				])
+			);
+		}
 
 		// Default choice, use of the `@html-eslint/parser`. TODO: throw error if not set
 		type HtmlNode<T, P = never> = T & { parent?: HtmlNode<P> };

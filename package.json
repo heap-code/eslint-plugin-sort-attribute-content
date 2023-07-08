@@ -11,6 +11,8 @@
 	"description": "An ESLint plugin to sort decorators",
 	"devDependencies": {
 		"@angular-eslint/template-parser": "^16.0.3",
+		"@angular-eslint/utils": "^16.0.3",
+		"@angular/compiler": "^16.1.4",
 		"@cspell/eslint-plugin": "^6.31.1",
 		"@html-eslint/parser": "^0.19.0",
 		"@release-it/conventional-changelog": "^5.1.1",
