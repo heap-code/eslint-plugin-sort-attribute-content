@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"declaration": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": false,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"outDir": "./dist",
+		"removeComments": true,
+		"resolveJsonModule": true,
+		"rootDir": "./src",
+		"sourceMap": true,
+		"strict": true,
+		"target": "es5"
+	},
+	"exclude": ["dist", "node_modules"]
+}
