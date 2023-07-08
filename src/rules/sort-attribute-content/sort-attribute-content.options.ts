@@ -15,7 +15,7 @@ export interface SortAttributeContentOption {
 	/**
 	 * Specify the direction of the ordering.
 	 *
-	 * @default "asc"
+	 * @default asc
 	 */
 	direction?: "asc" | "desc";
 	/**
@@ -24,7 +24,7 @@ export interface SortAttributeContentOption {
 	 * It uses a RegExp if it starts and ends with a `/`.
 	 * Otherwise, it is only the single provided value
 	 *
-	 * @default "/\s+/"
+	 * @default /\s+/
 	 */
 	separator?: string;
 }

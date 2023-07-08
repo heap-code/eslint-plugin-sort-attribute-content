@@ -1,1 +1,43 @@
-{}
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"description": "The ESLint options",
+	"items": {
+		"additionalProperties": false,
+		"description": "A single Option for one or many attributes",
+		"properties": {
+			"attributes": {
+				"anyOf": [
+					{
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					{
+						"type": "string"
+					}
+				],
+				"description": "The attribute name(s) on which this option is applied."
+			},
+			"caseSensitive": {
+				"default": true,
+				"description": "If true, enforce properties to be in case-sensitive order.",
+				"type": "boolean"
+			},
+			"direction": {
+				"default": "asc",
+				"description": "Specify the direction of the ordering.",
+				"enum": ["asc", "desc"],
+				"type": "string"
+			},
+			"separator": {
+				"default": "/\\s+/",
+				"description": "The separator used to split the attribute content.\n\nIt uses a RegExp if it starts and ends with a `/`.\nOtherwise, it is only the single provided value",
+				"type": "string"
+			}
+		},
+		"required": ["attributes"],
+		"type": "object"
+	},
+	"type": "array"
+}

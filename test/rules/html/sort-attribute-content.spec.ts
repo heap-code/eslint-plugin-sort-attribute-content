@@ -16,8 +16,23 @@ new RuleTester({
 	{
 		valid: [
 			{
+				code: `<div></div>`,
+				name: "Nothing to do",
+				options: [[{ attributes: "class" }]]
+			},
+			{
+				code: `<div class="B "></div>`,
+				name: "Nothing to sort",
+				options: [[{ attributes: "class" }]]
+			},
+			{
 				code: `<div class="B D a c"></div>`,
-				name: "Default order",
+				name: "Default order 1",
+				options: [[{ attributes: "class" }]]
+			},
+			{
+				code: `<div class="B Da Da c"></div>`,
+				name: "Default order 2",
 				options: [[{ attributes: "class" }]]
 			},
 			{
@@ -36,9 +51,9 @@ new RuleTester({
 				options: [[{ attributes: "data-class", separator: "|" }]]
 			},
 			{
-				code: `<div data-class="|B||D|a|||c"></div>`,
+				code: `<div data-class="-B||D|a|-|c"></div>`,
 				name: "Custom separator (RegExp)",
-				options: [[{ attributes: "data-class", separator: "/|+/" }]]
+				options: [[{ attributes: "data-class", separator: "/[\\|-]+/" }]]
 			},
 			{
 				code: `<div class="B D a c" data-class="E  F g h "></div>`,
@@ -72,14 +87,14 @@ new RuleTester({
 			},
 			{
 				code: `<div class="B D a c"></div>`,
-				errors: [{ column: 15, endColumn: 16, messageId: "incorrect-order" }],
+				errors: [{ column: 17, endColumn: 18, messageId: "incorrect-order" }],
 				name: "[Fix] Un-sensitive order",
 				options: [[{ attributes: "class", caseSensitive: false }]],
 				output: `<div class="a B c D"></div>`
 			},
 			{
 				code: `<div class="a D B c"></div>`,
-				errors: [{ column: 15, endColumn: 16, messageId: "incorrect-order" }],
+				errors: [{ column: 19, endColumn: 20, messageId: "incorrect-order" }],
 				name: "[Fix] Reverse order",
 				options: [[{ attributes: "class", direction: "desc" }]],
 				output: `<div class="c a D B"></div>`
@@ -92,16 +107,23 @@ new RuleTester({
 				output: `<div data-class="B|D|a|c"></div>`
 			},
 			{
-				code: `<div data-class="|D||c|a|||B"></div>`,
+				code: `<div data-class="-D||c|a|-|B"></div>`,
 				errors: [{ messageId: "incorrect-order" }],
 				name: "[Fix] Custom separator (RegExp)",
-				options: [[{ attributes: "data-class", separator: "/|+/" }]],
-				output: `<div data-class="|B||D|a|||c"></div>`
+				options: [[{ attributes: "data-class", separator: "/[\\|-]+/" }]],
+				output: `<div data-class="-B||D|a|-|c"></div>`
 			},
 			{
-				code: `<div class="B D a c"><span data-class="E F g h">Test</span></div>`,
+				code: `<div class="B a D c"><span data-class="E F g h">Test</span></div>`,
 				errors: [{ messageId: "incorrect-order" }],
-				name: "[Fix] Default order (multiple attributes)",
+				name: "[Fix] Default order (multiple attributes) 1",
+				options: [[{ attributes: ["class", "data-class"] }]],
+				output: `<div class="B D a c"><span data-class="E F g h">Test</span></div>`
+			},
+			{
+				code: `<div class="B a D c"><span data-class="h E g F">Test</span></div>`,
+				errors: [{ messageId: "incorrect-order" }, { messageId: "incorrect-order" }],
+				name: "[Fix] Default order (multiple attributes) 2",
 				options: [[{ attributes: ["class", "data-class"] }]],
 				output: `<div class="B D a c"><span data-class="E F g h">Test</span></div>`
 			},
