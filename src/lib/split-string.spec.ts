@@ -24,7 +24,7 @@ describe("splitString", () => {
 			],
 			[
 				"a|b-",
-				/[\|-]/g,
+				/[\\|-]/g,
 				[
 					{ content: "a", index: 0, separator: false },
 					{ content: "|", index: 1, separator: true },
