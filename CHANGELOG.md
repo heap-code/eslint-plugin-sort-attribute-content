@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/heap-code/eslint-plugin-sort-attribute-content/compare/v0.1.0...v0.1.1) (2023-07-08)
+
+
+### Bug Fixes
+
+* **config:** thrown an error if an option is wrongly set ([3bb0422](https://github.com/heap-code/eslint-plugin-sort-attribute-content/commit/3bb0422b6c0d1192ba549ccf9709b0c425a3e747)), closes [#6](https://github.com/heap-code/eslint-plugin-sort-attribute-content/issues/6)
+
 # 0.1.0 (2023-07-08)
 
 
