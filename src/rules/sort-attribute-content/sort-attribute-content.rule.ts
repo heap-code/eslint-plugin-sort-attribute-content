@@ -42,6 +42,16 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			(context.options as [SortAttributeContentOptions])[0]
 		);
 
+		if (ruleOptions.length === 0) {
+			throw new Error("There is no options defined for this rule.");
+		}
+		if (ruleOptions.some(({ attributes }) => attributes.length === 0)) {
+			throw new Error("At least one of the options have no attributes");
+		}
+		if (ruleOptions.some(({ separator }) => separator.length === 0)) {
+			throw new Error("At least one of the options have an empty separator");
+		}
+
 		/**
 		 * @param content The attribute value
 		 * @param options The sort options
@@ -54,9 +64,6 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			nodeInfo: Pick<AttributeNode, "loc" | "range"> & { attribute: string }
 		) {
 			const { caseSensitive, direction, separator } = options;
-			if (!separator.length) {
-				throw new Error("Can not sort attribute content with an empty separator.");
-			}
 
 			const parts = splitString(
 				content,
