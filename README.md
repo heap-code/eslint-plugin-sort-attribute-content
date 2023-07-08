@@ -57,6 +57,12 @@ The rule can be defined as follows:
 
 <!-- begin auto-generated rules list -->
 
+🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).
+
+| Name                                                           | 🔧 |
+| :------------------------------------------------------------- | :- |
+| [sort-attribute-content](docs/rules/sort-attribute-content.md) | 🔧 |
+
 <!-- end auto-generated rules list -->
 
 ## Releases
