@@ -1,6 +1,6 @@
-import { type TmplAstTextAttribute } from "@angular/compiler";
-import { type TemplateParserServices } from "@angular-eslint/utils";
-import { AttributeNode, AttributeValueNode, TokenTypes } from "es-html-parser";
+import type { TmplAstTextAttribute } from "@angular/compiler";
+import type { TemplateParserServices } from "@angular-eslint/utils";
+import type { AttributeNode, AttributeValueNode } from "es-html-parser";
 import { Rule } from "eslint";
 
 import {
@@ -174,11 +174,16 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			);
 		}
 
-		// Default choice, use of the `@html-eslint/parser`. TODO: throw error if not set
+		// Default choice, use of the `@html-eslint/parser` with dynamic modules.
+
+		// Throw an error if the module does not exist
+		require("@html-eslint/parser");
+		// eslint-disable-next-line @typescript-eslint/no-var-requires -- Dynamic loading
+		const { TokenTypes } = require("es-html-parser") as typeof import("es-html-parser");
+
 		type HtmlNode<T, P = never> = T & { parent?: HtmlNode<P> };
 		return {
 			[TokenTypes.AttributeValue](nodeRaw: Rule.Node) {
-				// Only to satisfy TS
 				const node = nodeRaw as unknown as HtmlNode<AttributeValueNode, AttributeNode>;
 
 				const attributeName = node.parent?.key.value;
