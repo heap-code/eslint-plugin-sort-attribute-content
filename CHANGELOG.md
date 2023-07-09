@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/heap-code/eslint-plugin-sort-attribute-content/compare/v0.2.0...v0.2.1) (2023-07-09)
+
+
+### Bug Fixes
+
+* remove direct `es-html-parser` dependence ([aec5f5f](https://github.com/heap-code/eslint-plugin-sort-attribute-content/commit/aec5f5f53c8fbf5c68164695e180e31302124e5f))
+
 # [0.2.0](https://github.com/heap-code/eslint-plugin-sort-attribute-content/compare/v0.1.1...v0.2.0) (2023-07-09)
 
 
