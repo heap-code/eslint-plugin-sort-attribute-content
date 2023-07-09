@@ -30,7 +30,7 @@ A parser must be set to use this plugin:
 }
 ```
 
-<!-- TODO: other parsers -->
+> Go to the [parsers section](#parsers) to display the list of available parsers.
 
 The plugin can then be activated by adding `sort-attribute-content` to the `plugins` property:
 
@@ -52,6 +52,54 @@ The rule can be defined as follows:
 
 > All this configuration can be done on a `override` section:
 > <https://eslint.org/docs/latest/use/configure/configuration-files#how-do-overrides-work>
+
+### Parsers
+
+The plugin can be used with multiple parsers.
+
+#### HTML
+
+A _regular_ HTML parser can be used for any HTML files.  
+The parser [@html-eslint/parser](https://www.npmjs.com/package/@html-eslint/parser)
+should be installed first:
+
+```bash
+npm i -D @html-eslint/parser
+```
+
+Then set in the configuration file:
+
+```json
+{
+  "parser": "@html-eslint/parser"
+}
+```
+
+#### Angular
+
+This plugin can be used with the [Angular framework](https://angular.io/).  
+The parser [@angular-eslint/template-parser](https://www.npmjs.com/package/@angular-eslint/template-parser)
+should be installed first:
+
+```bash
+npm i -D @angular-eslint/template-parser
+```
+
+Then set in the configuration file:
+
+```json
+{
+  "parser": "@angular-eslint/template-parser"
+}
+```
+
+> **Note**:  
+> It only works for TextAttributes.
+>
+> ```angular2html
+> <div class="a b c" [title]="'d e f'"></div>
+>             ^^^^^
+> ```
 
 ## Rules
 
