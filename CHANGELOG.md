@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.3.0](https://github.com/heap-code/eslint-plugin-sort-attribute-content/compare/v0.2.1...v0.3.0) (2023-07-11)
+
+
+### Features
+
+* **react:** can sort litteral attribute content on React code ([ba1085c](https://github.com/heap-code/eslint-plugin-sort-attribute-content/commit/ba1085cfecb39ca694a440d0d83c03ef7d8b4055)), closes [#5](https://github.com/heap-code/eslint-plugin-sort-attribute-content/issues/5)
+
 ## [0.2.1](https://github.com/heap-code/eslint-plugin-sort-attribute-content/compare/v0.2.0...v0.2.1) (2023-07-09)
 
 
