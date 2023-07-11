@@ -6,6 +6,10 @@
 
 An ESLint plugin to sort attribute content in HTML
 
+> If you are using [Tailwind](https://tailwindcss.com/) and only want to lint the classnames,
+> then the [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
+> is probably a better choice.
+
 ## Installation
 
 First, `eslint` must be installed:
