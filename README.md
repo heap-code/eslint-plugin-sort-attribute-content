@@ -6,6 +6,10 @@
 
 An ESLint plugin to sort attribute content in HTML
 
+> If you are using [Tailwind](https://tailwindcss.com/) and only want to lint the classnames,
+> then the [eslint-plugin-tailwindcss](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
+> is probably a better choice.
+
 ## Installation
 
 First, `eslint` must be installed:
@@ -94,11 +98,59 @@ Then set in the configuration file:
 ```
 
 > **Note**:  
-> It only works for TextAttributes.
+> It only works for text attributes.
 >
 > ```angular2html
 > <div class="a b c" [title]="'d e f'"></div>
 >             ^^^^^
+> ```
+
+#### React
+
+This plugin can be used with the [React library](https://react.dev/).  
+ESLint must first be configured to read React.  
+> [How to configure?](https://github.com/jsx-eslint/eslint-plugin-react#configuration-legacy-eslintrc-)
+
+Once enabled, it will work on `jsx` and `tsx` files.
+
+> Do not forget to set the [typescript parser](https://typescript-eslint.io/packages/parser/)
+> for `tsx` files.
+>
+> Install:
+>
+> ```bash
+> npm i -D @typescript-eslint/parser
+> ```
+>
+> Then set in the configuration file:
+>
+> ```json
+> {
+>   "parser": "@typescript-eslint/parser"
+> }
+> ```
+
+It might be useful to enable the rule only on these files:
+
+```json
+{
+  "overrides": [
+    {
+      "files": ["*.jsx", "*.tsx"],
+      "rules": {
+        "sort-attribute-content/sort-attribute-content": ["error", { "attributes": "className" }]
+      }
+    }
+  ]
+}
+```
+
+> **Note**:  
+> It only works for literal text attributes.
+>
+> ```tsx
+> return <div className="a b c" title={title} />
+>                        ^^^^^
 > ```
 
 ## Rules

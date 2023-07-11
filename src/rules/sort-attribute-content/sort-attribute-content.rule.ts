@@ -1,5 +1,6 @@
 import type { TmplAstTextAttribute } from "@angular/compiler";
 import type { TemplateParserServices } from "@angular-eslint/utils";
+import type { TSESLint } from "@typescript-eslint/utils";
 import type { AttributeNode, AttributeValueNode } from "es-html-parser";
 import { Rule } from "eslint";
 
@@ -149,8 +150,11 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			}
 		}
 
+		const { filename, parserPath } = context;
+
 		// TODO: a better way to determine the parser?
-		if (context.parserPath.includes("@angular-eslint/template-parser")) {
+		// React parser
+		if (parserPath.includes("@angular-eslint/template-parser")) {
 			const { convertNodeSourceSpanToLoc } = context.parserServices as TemplateParserServices;
 
 			return Object.fromEntries(
@@ -172,6 +176,44 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 					}
 				])
 			);
+		}
+
+		// React framework
+		if (filename.endsWith("jsx") || filename.endsWith("tsx")) {
+			return {
+				JSXAttribute(node) {
+					const { name, value } = node;
+
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- the use of the enum would make the library a required dependency
+					if (name.type !== "JSXIdentifier" || value?.type !== "Literal") {
+						return;
+					}
+
+					const attribute = name.name;
+					const attrValue = value.value;
+					if (typeof attrValue !== "string") {
+						return;
+					}
+
+					const option = ruleOptions.find(({ attributes }) =>
+						attributes.includes(attribute)
+					);
+
+					if (option) {
+						const {
+							loc,
+							range: [x, y]
+						} = value;
+
+						checkRule(attrValue, option, {
+							attribute,
+							loc,
+							// Remove the `"` from both sides
+							range: [x + 1, y - 1]
+						});
+					}
+				}
+			} satisfies TSESLint.RuleListener as never;
 		}
 
 		// Default choice, use of the `@html-eslint/parser` with dynamic modules.
