@@ -150,7 +150,7 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			}
 		}
 
-		const { filename, parserOptions, parserPath } = context;
+		const { filename, parserPath } = context;
 
 		// TODO: a better way to determine the parser?
 		// React parser
