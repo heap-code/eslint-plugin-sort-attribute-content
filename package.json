@@ -10,8 +10,8 @@
 	},
 	"description": "An ESLint plugin to sort decorators",
 	"devDependencies": {
-		"@angular-eslint/template-parser": "^16.0.3",
-		"@angular-eslint/utils": "^16.0.3",
+		"@angular-eslint/template-parser": "^17.0.0",
+		"@angular-eslint/utils": "^17.0.0",
 		"@angular/compiler": "^16.1.4",
 		"@cspell/eslint-plugin": "^6.31.1",
 		"@html-eslint/parser": "^0.22.0",
