@@ -1,10 +1,6 @@
-/**
- * A single Option for one or many attributes
- */
+/** A single Option for one or many attributes */
 export interface SortAttributeContentOption {
-	/**
-	 * The attribute name(s) on which this option is applied.
-	 */
+	/** The attribute name(s) on which this option is applied. */
 	attributes: string[] | string;
 	/**
 	 * If true, enforce properties to be in case-sensitive order.
@@ -29,9 +25,7 @@ export interface SortAttributeContentOption {
 	separator?: string;
 }
 
-/**
- * The ESLint options
- */
+/** The ESLint options */
 export type SortAttributeContentOptions = SortAttributeContentOption[];
 
 /**
@@ -46,7 +40,7 @@ export function getOptionsWithDefaults(options: SortAttributeContentOption[]) {
 				direction: "asc",
 				separator: "/\\s+/",
 				...option,
-				attributes: Array.isArray(attributes) ? attributes : [attributes]
-			} as const satisfies SortAttributeContentOption)
+				attributes: Array.isArray(attributes) ? attributes : [attributes],
+			}) as const satisfies SortAttributeContentOption,
 	);
 }

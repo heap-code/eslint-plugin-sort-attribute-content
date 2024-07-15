@@ -45,7 +45,14 @@
 			}
 		},
 		{
-			"files": [".eslintrc.json", ".prettierrc.json", "tsconfig.json", "tsconfig.*.json"],
+			"files": [
+				".devcontainer/**/devcontainer.json",
+				".eslintrc.json",
+				".prettierrc.json",
+				"tsconfig.json",
+				"tsconfig.*.json",
+				".vscode/*.json"
+			],
 			"rules": {
 				/* OK for `rc` files */
 				"jsonc/no-comments": "off"
@@ -61,7 +68,42 @@
 			"files": ["*.ts", "*.js"],
 			"plugins": ["jsdoc"],
 			"rules": {
+				"jsdoc/multiline-blocks": [
+					"error",
+					{
+						"minimumLengthForMultiline": 60,
+						"noMultilineBlocks": true
+					}
+				],
+				"jsdoc/no-blank-blocks": [
+					"error",
+					{
+						"enableFixer": true
+					}
+				],
 				"jsdoc/no-undefined-types": "off",
+				"jsdoc/require-asterisk-prefix": ["error", "always"],
+				/* Hyphen is considered as a bullet point in compodoc */
+				"jsdoc/require-hyphen-before-param-description": ["error", "never"],
+				"jsdoc/require-jsdoc": [
+					"warn",
+					{
+						"contexts": ["TSEnumDeclaration", "TSInterfaceDeclaration"],
+						"publicOnly": true
+					}
+				],
+				"jsdoc/require-param": [
+					"warn",
+					{
+						"exemptedBy": ["inheritDoc", "internal", "private"]
+					}
+				],
+				"jsdoc/require-returns": [
+					"warn",
+					{
+						"exemptedBy": ["inheritDoc", "internal", "private"]
+					}
+				],
 				"jsdoc/require-throws": "warn",
 				"jsdoc/tag-lines": [
 					"error",
@@ -75,7 +117,40 @@
 				"sonarjs/no-identical-conditions": "error",
 				"sonarjs/no-identical-expressions": "error",
 				"sonarjs/non-existent-operator": "error",
-				"sonarjs/prefer-immediate-return": "error"
+				"sonarjs/prefer-immediate-return": "error",
+				"typescript-sort-keys/interface": "warn",
+				"typescript-sort-keys/string-enum": "warn",
+				"unicorn/filename-case": [
+					"error",
+					{
+						"case": "kebabCase"
+					}
+				],
+				"unicorn/no-abusive-eslint-disable": "error",
+				"unicorn/no-array-for-each": "error",
+				"unicorn/no-await-expression-member": "error",
+				"unicorn/no-empty-file": "error",
+				"unicorn/no-for-loop": "error",
+				"unicorn/no-lonely-if": "error",
+				"unicorn/no-negated-condition": "error",
+				"unicorn/no-thenable": "error",
+				"unicorn/prefer-array-find": "error",
+				"unicorn/prefer-array-flat": "error",
+				"unicorn/prefer-array-flat-map": "error",
+				"unicorn/prefer-array-some": "error",
+				"unicorn/prefer-default-parameters": "error",
+				"unicorn/prefer-includes": "error",
+				"unicorn/prefer-object-from-entries": "error",
+				"unicorn/prefer-optional-catch-binding": "error",
+				"unicorn/throw-new-error": "error",
+				"unused-imports/no-unused-imports": "error",
+				"unused-imports/no-unused-vars": [
+					"warn",
+					{
+						"args": "after-used",
+						"argsIgnorePattern": "^_"
+					}
+				]
 			}
 		},
 		{
@@ -175,12 +250,6 @@
 					}
 				],
 				"@typescript-eslint/no-for-in-array": "error",
-				"@typescript-eslint/no-implicit-any-catch": [
-					"error",
-					{
-						"allowExplicitAny": false
-					}
-				],
 				"@typescript-eslint/no-inferrable-types": "error",
 				"@typescript-eslint/no-misused-new": "error",
 				"@typescript-eslint/no-non-null-asserted-optional-chain": "error",
@@ -196,7 +265,6 @@
 				"@typescript-eslint/sort-type-constituents": "error",
 				"@typescript-eslint/type-annotation-spacing": "error",
 				"etc/no-assign-mutated-array": "error",
-				"etc/no-deprecated": "warn",
 				"etc/no-implicit-any-catch": [
 					"error",
 					{
@@ -229,7 +297,7 @@
 			"env": {
 				"jest": true
 			},
-			"extends": ["plugin:jest/recommended", "plugin:jest/style", "plugin:jest-extended/all"],
+			"extends": ["plugin:jest/recommended", "plugin:jest/style"],
 			"files": ["*.spec.ts", "*.spec.js"],
 			"plugins": ["jest"],
 			"rules": {
@@ -272,6 +340,13 @@
 			}
 		},
 		{
+			"files": ["Dockerfile"],
+			"parser": "eslint-plugin-markdownlint/parser",
+			"rules": {
+				"prettier/prettier": "error"
+			}
+		},
+		{
 			"files": ["docs/rules/*.md"],
 			"rules": {
 				"markdownlint/md024": "off"
@@ -285,31 +360,18 @@
 		}
 	],
 	"plugins": [
-		"@cspell",
-		"@shopify",
 		"eslint-plugin-import",
 		"etc",
-		"jest-extended",
 		"prettier",
 		"sonarjs",
 		"sort-destructure-keys",
+		"sort-keys-plus",
 		"typescript-sort-keys",
 		"unicorn",
 		"unused-imports"
 	],
 	"root": true,
 	"rules": {
-		"@cspell/spellchecker": [
-			"warn",
-			{
-				"autoFix": true,
-				"customWordListFile": "./tools/cspell/words.txt"
-			}
-		],
-		"@shopify/no-useless-computed-properties": "error",
-		"@shopify/prefer-early-return": "error",
-		"arrow-parens": "off",
-		"comma-dangle": "error",
 		"curly": ["error", "all"],
 		"eol-last": "error",
 		"eqeqeq": "error",
@@ -347,13 +409,6 @@
 					"object"
 				],
 				"newlines-between": "always"
-			}
-		],
-		"keyword-spacing": [
-			"error",
-			{
-				"after": true,
-				"before": true
 			}
 		],
 		"no-alert": "error",
@@ -404,7 +459,6 @@
 				"avoidEscape": true
 			}
 		],
-		"semi": ["error", "always"],
 		"sort-destructure-keys/sort-destructure-keys": "error",
 		"sort-keys": [
 			"error",
@@ -413,47 +467,11 @@
 				"allowLineSeparatedGroups": true
 			}
 		],
-		"sort-vars": "error",
-		"space-before-blocks": "error",
-		"space-before-function-paren": [
+		"sort-keys-plus/sort-keys": [
 			"error",
+			"asc",
 			{
-				"asyncArrow": "always",
-				"named": "never"
-			}
-		],
-		"spaced-comment": "error",
-		"typescript-sort-keys/interface": "warn",
-		"typescript-sort-keys/string-enum": "warn",
-		"unicorn/filename-case": [
-			"error",
-			{
-				"case": "kebabCase"
-			}
-		],
-		"unicorn/no-abusive-eslint-disable": "error",
-		"unicorn/no-array-for-each": "error",
-		"unicorn/no-await-expression-member": "error",
-		"unicorn/no-empty-file": "error",
-		"unicorn/no-for-loop": "error",
-		"unicorn/no-lonely-if": "error",
-		"unicorn/no-negated-condition": "error",
-		"unicorn/no-thenable": "error",
-		"unicorn/prefer-array-find": "error",
-		"unicorn/prefer-array-flat": "error",
-		"unicorn/prefer-array-flat-map": "error",
-		"unicorn/prefer-array-some": "error",
-		"unicorn/prefer-default-parameters": "error",
-		"unicorn/prefer-includes": "error",
-		"unicorn/prefer-object-from-entries": "error",
-		"unicorn/prefer-optional-catch-binding": "error",
-		"unicorn/throw-new-error": "error",
-		"unused-imports/no-unused-imports": "error",
-		"unused-imports/no-unused-vars": [
-			"warn",
-			{
-				"args": "after-used",
-				"argsIgnorePattern": "^_"
+				"allowLineSeparatedGroups": true
 			}
 		]
 	}

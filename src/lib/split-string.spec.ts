@@ -10,8 +10,8 @@ describe("splitString", () => {
 					{ content: "a", index: 0, separator: false },
 					{ content: "-", index: 1, separator: true },
 					{ content: "b", index: 2, separator: false },
-					{ content: "-", index: 3, separator: true }
-				]
+					{ content: "-", index: 3, separator: true },
+				],
 			],
 			[
 				"a-b",
@@ -19,8 +19,8 @@ describe("splitString", () => {
 				[
 					{ content: "a", index: 0, separator: false },
 					{ content: "-", index: 1, separator: true },
-					{ content: "b", index: 2, separator: false }
-				]
+					{ content: "b", index: 2, separator: false },
+				],
 			],
 			[
 				"a|b-",
@@ -29,8 +29,8 @@ describe("splitString", () => {
 					{ content: "a", index: 0, separator: false },
 					{ content: "|", index: 1, separator: true },
 					{ content: "b", index: 2, separator: false },
-					{ content: "-", index: 3, separator: true }
-				]
+					{ content: "-", index: 3, separator: true },
+				],
 			],
 			[
 				"a--bc-",
@@ -39,9 +39,9 @@ describe("splitString", () => {
 					{ content: "a", index: 0, separator: false },
 					{ content: "--", index: 1, separator: true },
 					{ content: "bc", index: 3, separator: false },
-					{ content: "-", index: 5, separator: true }
-				]
-			]
+					{ content: "-", index: 5, separator: true },
+				],
+			],
 		] satisfies Array<[string, RegExp, SplitStringPart[]]>) {
 			expect(splitString(string, regexp)).toStrictEqual(expected);
 		}
