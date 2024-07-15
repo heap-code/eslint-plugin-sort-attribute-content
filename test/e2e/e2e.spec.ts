@@ -4,7 +4,7 @@ import { Linter } from "eslint";
 import {
 	SORT_ATTRIBUTE_CONTENT_NAME,
 	SortAttributeContentOptions,
-	sortAttributeContentRule
+	sortAttributeContentRule,
 } from "../../src/rules";
 
 describe("e2e", () => {
@@ -18,8 +18,8 @@ describe("e2e", () => {
 		linter.verify("<div></div>", {
 			parser,
 			rules: {
-				[SORT_ATTRIBUTE_CONTENT_NAME]: ["error", options]
-			}
+				[SORT_ATTRIBUTE_CONTENT_NAME]: ["error", options],
+			},
 		});
 
 	it("should throw an error when no option is set", () => {

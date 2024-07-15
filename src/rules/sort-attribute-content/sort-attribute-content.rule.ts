@@ -7,11 +7,11 @@ import { Rule } from "eslint";
 import {
 	SortAttributeContentMessageParams,
 	sortAttributeContentMessages,
-	SortAttributeContentMessagesId
+	SortAttributeContentMessagesId,
 } from "./sort-attribute-content.messages";
 import {
 	getOptionsWithDefaults,
-	SortAttributeContentOptions
+	SortAttributeContentOptions,
 } from "./sort-attribute-content.options";
 import schema from "./sort-attribute-content.options.schema.json";
 import { splitString, SplitStringPart } from "../../lib/split-string";
@@ -42,7 +42,7 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			regex.length > 1 && [regex[0], regex[regex.length - 1]].every(char => char === "/");
 
 		const ruleOptions = getOptionsWithDefaults(
-			(context.options as [SortAttributeContentOptions])[0]
+			(context.options as [SortAttributeContentOptions])[0],
 		);
 
 		if (ruleOptions.length === 0) {
@@ -64,7 +64,7 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 		function checkRule(
 			content: string,
 			options: Omit<(typeof ruleOptions)[number], "attributes">,
-			nodeInfo: Pick<AttributeNode, "loc" | "range"> & { attribute: string }
+			nodeInfo: Pick<AttributeNode, "loc" | "range"> & { attribute: string },
 		) {
 			const { caseSensitive, direction, separator } = options;
 
@@ -72,8 +72,8 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 				content,
 				new RegExp(
 					isRegExpString(separator) ? separator.slice(1, -1) : escapeRegExp(separator),
-					"g"
-				)
+					"g",
+				),
 			).map((part, position) => ({ ...part, position }));
 
 			if (parts.length < 3) {
@@ -92,12 +92,12 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 				? values
 				: values.map(({ content, ...value }) => ({
 						...value,
-						content: content.toLowerCase()
-				  }));
+						content: content.toLowerCase(),
+					}));
 
 			// Look for the position on which the values are not sorted properly
 			const diffIndex = toSort.findIndex(
-				({ content }, i) => i !== 0 && sorter(content, toSort[i - 1].content) < 0
+				({ content }, i) => i !== 0 && sorter(content, toSort[i - 1].content) < 0,
 			);
 
 			if (diffIndex > 0) {
@@ -110,12 +110,12 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 					data: {
 						after: intruder.content,
 						attribute,
-						previous: values[diffIndex - 1].content
+						previous: values[diffIndex - 1].content,
 					} satisfies SortAttributeContentMessageParams<"incorrect-order">,
 					fix: fixer => {
 						const constructFix = (
 							parts: SplitStringPart[],
-							sortedValues: string[]
+							sortedValues: string[],
 						): string[] => {
 							if (!parts.length) {
 								return [];
@@ -137,20 +137,20 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 								toSort
 									.slice()
 									.sort(({ content: a }, { content: b }) => sorter(a, b))
-									.map(({ position }) => parts[position].content)
-							).join("")
+									.map(({ position }) => parts[position].content),
+							).join(""),
 						);
 					},
 					loc: {
 						end: { column: startCol + intruder.content.length, line: loc.end.line },
-						start: { column: startCol, line: loc.start.line }
+						start: { column: startCol, line: loc.start.line },
 					},
-					messageId: "incorrect-order" satisfies SortAttributeContentMessagesId
+					messageId: "incorrect-order" satisfies SortAttributeContentMessagesId,
 				});
 			}
 		}
 
-		const { filename, parserPath } = context;
+		const { filename, parserPath = "" } = context;
 
 		// TODO: a better way to determine the parser?
 		// React parser
@@ -171,10 +171,10 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 						checkRule(value, option, {
 							attribute: name,
 							loc: convertNodeSourceSpanToLoc(valueSpan),
-							range: [valueSpan.start.offset, valueSpan.end.offset]
+							range: [valueSpan.start.offset, valueSpan.end.offset],
 						});
-					}
-				])
+					},
+				]),
 			);
 		}
 
@@ -196,23 +196,23 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 					}
 
 					const option = ruleOptions.find(({ attributes }) =>
-						attributes.includes(attribute)
+						attributes.includes(attribute),
 					);
 
 					if (option) {
 						const {
 							loc,
-							range: [x, y]
+							range: [x, y],
 						} = value;
 
 						checkRule(attrValue, option, {
 							attribute,
 							loc,
 							// Remove the `"` from both sides
-							range: [x + 1, y - 1]
+							range: [x + 1, y - 1],
 						});
 					}
-				}
+				},
 			} satisfies TSESLint.RuleListener as never;
 		}
 
@@ -235,24 +235,27 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 
 				// Get an available option for the given attribute name
 				const option = ruleOptions.find(({ attributes }) =>
-					attributes.includes(attributeName)
+					attributes.includes(attributeName),
 				);
 				if (option) {
 					checkRule(node.value, option, {
 						attribute: attributeName,
-						...node
+						...node,
 					});
 				}
-			}
+			},
 		};
 	},
 	meta: {
 		docs: {
-			recommended: false
+			description: "enforce the order of the content of HTML attributes",
+			recommended: false,
+			url: "https://github.com/heap-code/eslint-plugin-sort-attribute-content/blob/master/docs/rules/sort-attribute-content.md",
 		},
 		fixable: "code",
 		messages: sortAttributeContentMessages,
-		schema: [schema]
+		schema: [schema],
+		type: "layout",
 	},
-	schema: [schema]
+	schema: [schema],
 };

@@ -8,6 +8,8 @@ package-lock.json
 
 !.release-it.json
 
+!.devcontainer/
+
 !.github/
 !.github/workflows/*.yml
 

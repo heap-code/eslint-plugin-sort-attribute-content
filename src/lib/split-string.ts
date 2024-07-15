@@ -1,15 +1,10 @@
+/** Results when splitting a string */
 export interface SplitStringPart {
-	/**
-	 * The content part, either a separator or an included string
-	 */
+	/** The content part, either a separator or an included string */
 	content: string;
-	/**
-	 * The start index from the initial string
-	 */
+	/** The start index from the initial string */
 	index: number;
-	/**
-	 * Is the chunk a separator?
-	 */
+	/** Is the chunk a separator? */
 	separator: boolean;
 }
 
@@ -38,7 +33,7 @@ export function splitString(string: string, regexp: RegExp): SplitStringPart[] {
 			return [
 				{ content, index, separator: true },
 				// The next index is the end of the string or the end of the separator
-				...splitParts(rest, index + content.length)
+				...splitParts(rest, index + content.length),
 			];
 		}
 
