@@ -51,7 +51,7 @@
 		"ts-node": "^10.9.1",
 		"tsup": "^8.0.0",
 		"typescript": "^5.1.5",
-		"typescript-json-schema": "^0.64.0"
+		"typescript-json-schema": "^0.65.0"
 	},
 	"homepage": "https://github.com/heap-code/eslint-plugin-sort-attribute-content",
 	"keywords": [
