@@ -1,71 +1,9 @@
 {
-	"extends": [
-		"eslint:recommended",
-		"plugin:eslint-comments/recommended",
-		"plugin:eslint-plugin/recommended",
-		"plugin:typescript-sort-keys/recommended"
-	],
+	"extends": ["eslint:recommended", "plugin:eslint-comments/recommended"],
 	"overrides": [
 		{
-			"extends": ["plugin:jsonc/base", "plugin:jsonc/recommended-with-json"],
-			"files": ["*.json"],
-			"rules": {
-				"jsonc/indent": ["error", "tab"],
-				"jsonc/key-spacing": [
-					"error",
-					{
-						"afterColon": true,
-						"beforeColon": false,
-						"mode": "strict"
-					}
-				],
-				"jsonc/no-comments": "warn",
-				"jsonc/object-curly-newline": [
-					"error",
-					{
-						"consistent": true,
-						"minProperties": 1,
-						"multiline": true
-					}
-				],
-				"jsonc/object-property-newline": [
-					"error",
-					{
-						"allowAllPropertiesOnSameLine": false
-					}
-				],
-				"jsonc/sort-keys": "error",
-				"max-len": "off",
-				"no-multiple-empty-lines": [
-					"error",
-					{
-						"max": 0
-					}
-				]
-			}
-		},
-		{
-			"files": [
-				".devcontainer/**/devcontainer.json",
-				".eslintrc.json",
-				".prettierrc.json",
-				"tsconfig.json",
-				"tsconfig.*.json",
-				".vscode/*.json"
-			],
-			"rules": {
-				/* OK for `rc` files */
-				"jsonc/no-comments": "off"
-			}
-		},
-		{
-			"extends": ["plugin:yml/recommended", "plugin:yml/prettier"],
-			"files": ["*.yml", "*.yaml"],
-			"parser": "yaml-eslint-parser"
-		},
-		{
 			"extends": ["plugin:jsdoc/recommended"],
-			"files": ["*.ts", "*.js"],
+			"files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
 			"plugins": ["jsdoc"],
 			"rules": {
 				"jsdoc/multiline-blocks": [
@@ -114,12 +52,16 @@
 				],
 				"sonarjs/no-all-duplicated-branches": "error",
 				"sonarjs/no-element-overwrite": "error",
+				"sonarjs/no-gratuitous-expressions": "error",
 				"sonarjs/no-identical-conditions": "error",
 				"sonarjs/no-identical-expressions": "error",
+				"sonarjs/no-inverted-boolean-check": "error",
 				"sonarjs/non-existent-operator": "error",
 				"sonarjs/prefer-immediate-return": "error",
-				"typescript-sort-keys/interface": "warn",
-				"typescript-sort-keys/string-enum": "warn",
+				"sonarjs/prefer-object-literal": "error",
+				"sonarjs/prefer-single-boolean-return": "error",
+				"sonarjs/prefer-while": "error",
+				"unicorn/better-regex": "error",
 				"unicorn/filename-case": [
 					"error",
 					{
@@ -128,9 +70,11 @@
 				],
 				"unicorn/no-abusive-eslint-disable": "error",
 				"unicorn/no-array-for-each": "error",
+				"unicorn/no-array-push-push": "error",
 				"unicorn/no-await-expression-member": "error",
-				"unicorn/no-empty-file": "error",
+				"unicorn/no-empty-file": "warn",
 				"unicorn/no-for-loop": "error",
+				"unicorn/no-instanceof-array": "error",
 				"unicorn/no-lonely-if": "error",
 				"unicorn/no-negated-condition": "error",
 				"unicorn/no-thenable": "error",
@@ -138,19 +82,14 @@
 				"unicorn/prefer-array-flat": "error",
 				"unicorn/prefer-array-flat-map": "error",
 				"unicorn/prefer-array-some": "error",
+				"unicorn/prefer-date-now": "error",
 				"unicorn/prefer-default-parameters": "error",
 				"unicorn/prefer-includes": "error",
 				"unicorn/prefer-object-from-entries": "error",
 				"unicorn/prefer-optional-catch-binding": "error",
-				"unicorn/throw-new-error": "error",
-				"unused-imports/no-unused-imports": "error",
-				"unused-imports/no-unused-vars": [
-					"warn",
-					{
-						"args": "after-used",
-						"argsIgnorePattern": "^_"
-					}
-				]
+				"unicorn/prefer-string-slice": "error",
+				"unicorn/prefer-string-starts-ends-with": "error",
+				"unicorn/throw-new-error": "error"
 			}
 		},
 		{
@@ -159,11 +98,10 @@
 				"plugin:@typescript-eslint/recommended-requiring-type-checking",
 				"plugin:@typescript-eslint/strict"
 			],
-			"files": ["*.ts"],
+			"files": ["*.ts", "*.tsx"],
 			"parser": "@typescript-eslint/parser",
 			"parserOptions": {
-				"project": "./tsconfig.lint.json",
-				"sourceType": "module"
+				"project": "./tsconfig.lint.json"
 			},
 			"rules": {
 				"@typescript-eslint/array-type": [
@@ -176,7 +114,7 @@
 					"error",
 					{
 						"ts-expect-error": {
-							"descriptionFormat": "^ - TS\\d+: .+$"
+							"descriptionFormat": "^ -- .+$"
 						}
 					}
 				],
@@ -200,9 +138,7 @@
 						"default": {
 							"memberTypes": [
 								"signature",
-								"public-static-field",
-								"protected-static-field",
-								"private-static-field",
+								"static-field",
 								"public-static-get",
 								"protected-static-get",
 								"private-static-get",
@@ -211,8 +147,8 @@
 								"protected-static-method",
 								"private-static-method",
 								"public-abstract-field",
-								"protected-abstract-field",
 								"public-instance-field",
+								"protected-abstract-field",
 								"protected-instance-field",
 								"private-instance-field",
 								["public-abstract-get", "public-abstract-set"],
@@ -228,10 +164,18 @@
 								"private-instance-method"
 							]
 						},
-						"interfaces": {
-							"memberTypes": ["field", "constructor", "method"],
-							"order": "alphabetically"
-						}
+						"interfaces": "never"
+					}
+				],
+				"@typescript-eslint/naming-convention": [
+					"error",
+					{
+						"format": ["PascalCase"],
+						"selector": "enum"
+					},
+					{
+						"format": ["UPPER_CASE"],
+						"selector": "enumMember"
 					}
 				],
 				"@typescript-eslint/no-confusing-non-null-assertion": "error",
@@ -242,6 +186,7 @@
 						"ignoreVoidOperator": true
 					}
 				],
+				"@typescript-eslint/no-empty-interface": "error",
 				"@typescript-eslint/no-extra-non-null-assertion": "error",
 				"@typescript-eslint/no-extraneous-class": [
 					"warn",
@@ -256,6 +201,18 @@
 				"@typescript-eslint/no-redundant-type-constituents": "error",
 				"@typescript-eslint/no-unnecessary-boolean-literal-compare": "warn",
 				"@typescript-eslint/no-unsafe-declaration-merging": "warn",
+				/* Managed by "unused-imports/no-unused-vars" */
+				"@typescript-eslint/no-unused-vars": "off",
+				"@typescript-eslint/no-use-before-define": [
+					"error",
+					{
+						"classes": false,
+						"functions": false,
+						"ignoreTypeReferences": true,
+						"typedefs": true
+					}
+				],
+				"@typescript-eslint/prefer-enum-initializers": "error",
 				"@typescript-eslint/prefer-for-of": "warn",
 				"@typescript-eslint/prefer-includes": "warn",
 				"@typescript-eslint/prefer-optional-chain": "warn",
@@ -265,18 +222,17 @@
 				"@typescript-eslint/sort-type-constituents": "error",
 				"@typescript-eslint/type-annotation-spacing": "error",
 				"etc/no-assign-mutated-array": "error",
-				"etc/no-implicit-any-catch": [
-					"error",
-					{
-						"allowExplicitAny": false
-					}
-				],
+				"etc/prefer-less-than": "warn",
 				"jsdoc/require-param-type": "off",
-				"jsdoc/require-returns-type": "off"
+				"jsdoc/require-returns-type": "off",
+				"typescript-sort-keys/interface": "warn",
+				"typescript-sort-keys/string-enum": "warn"
 			}
 		},
+		/** Custom rules ("code") */
 		{
-			"files": ["jest.config.ts", "src/index.ts", "src/configs/*.ts"],
+			// Configuration files
+			"files": ["jest.config.ts", "src/configs/*.ts", "src/index.ts"],
 			"rules": {
 				"import/no-default-export": "off"
 			}
@@ -298,7 +254,7 @@
 				"jest": true
 			},
 			"extends": ["plugin:jest/recommended", "plugin:jest/style"],
-			"files": ["*.spec.ts", "*.spec.js"],
+			"files": ["*.spec.js", "*.spec.jsx", "*.spec.ts", "*.spec.tsx"],
 			"plugins": ["jest"],
 			"rules": {
 				/* Ok for test files */
@@ -317,6 +273,104 @@
 				]
 			}
 		},
+		/** Custom rules ("non-code") */
+		{
+			"extends": ["plugin:jsonc/base", "plugin:jsonc/recommended-with-json"],
+			"files": ["*.json"],
+			"rules": {
+				"jsonc/array-bracket-newline": [
+					/* prettier */
+					"off",
+					{
+						"minItems": 2,
+						"multiline": true
+					}
+				],
+				"jsonc/array-element-newline": [
+					/* prettier */
+					"off",
+					"always"
+				],
+				"jsonc/indent": ["error", "tab"],
+				"jsonc/key-spacing": [
+					"error",
+					{
+						"afterColon": true,
+						"beforeColon": false,
+						"mode": "strict"
+					}
+				],
+				"jsonc/no-comments": "warn",
+				"jsonc/object-curly-newline": [
+					"error",
+					{
+						"consistent": true,
+						"minProperties": 1,
+						"multiline": true
+					}
+				],
+				"jsonc/object-property-newline": [
+					"error",
+					{
+						"allowAllPropertiesOnSameLine": false
+					}
+				],
+				"jsonc/sort-keys": "error",
+				"no-multiple-empty-lines": [
+					"error",
+					{
+						"max": 0
+					}
+				]
+			}
+		},
+		{
+			"files": [
+				".devcontainer/**/devcontainer.json",
+				".eslintrc.json",
+				".prettierrc.json",
+				".vscode/settings.json",
+				"tsconfig.*.json",
+				"tsconfig.json"
+			],
+			"rules": {
+				/* OK for `rc` files */
+				"jsonc/no-comments": "off",
+				"jsonc/sort-array-values": [
+					"warn",
+					{
+						"order": {
+							"type": "asc"
+						},
+						"pathPattern": "compilerOptions.(lib|types)$|include$|files$|^exclude$|extends$|plugins$|cSpell.words|eslint.validate|auto-close-tag.\\w+|stylelint.\\w+|vscode.extensions$"
+					}
+				]
+			}
+		},
+		{
+			"extends": ["plugin:yml/prettier", "plugin:yml/recommended", "plugin:yml/standard"],
+			"files": ["*.yaml", "*.yml"],
+			"parser": "yaml-eslint-parser",
+			"rules": {
+				"yml/block-sequence": ["error", "always"],
+				"yml/sort-sequence-values": [
+					"warn",
+					{
+						"order": {
+							"type": "asc"
+						},
+						"pathPattern": ".*"
+					}
+				]
+			}
+		},
+		{
+			"files": ["*.sql"],
+			"parser": "yaml-eslint-parser",
+			"rules": {
+				/* Only prettier*/
+			}
+		},
 		{
 			"extends": ["plugin:markdownlint/recommended"],
 			"files": ["*.md"],
@@ -325,18 +379,24 @@
 				"markdownlint/md013": [
 					"error",
 					{
-						"line_length": 100,
-						"tables": false
+						"line_length": 200
 					}
 				],
 				"markdownlint/md033": [
 					"error",
 					{
-						"allowed_elements": ["a", "img", "br", "details", "summary", "code"]
+						"allowed_elements": ["a", "img"]
 					}
 				],
 				"no-trailing-spaces": "off",
 				"prettier/prettier": "off"
+			}
+		},
+		{
+			"files": ["docs/rules/*.md"],
+			"rules": {
+				"markdownlint/md024": "off",
+				"markdownlint/md033": "off"
 			}
 		},
 		{
@@ -347,15 +407,10 @@
 			}
 		},
 		{
-			"files": ["docs/rules/*.md"],
+			"files": ["*.js", "*.ts"],
 			"rules": {
-				"markdownlint/md024": "off"
-			}
-		},
-		{
-			"files": ["README.md"],
-			"rules": {
-				"unicorn/filename-case": "off"
+				/* FIXME: There's a plugin that disables that rule (probably prettier) */
+				"curly": ["error", "all"]
 			}
 		}
 	],
@@ -372,23 +427,12 @@
 	],
 	"root": true,
 	"rules": {
-		"curly": ["error", "all"],
-		"eol-last": "error",
 		"eqeqeq": "error",
 		"eslint-comments/no-unused-disable": "error",
 		"eslint-comments/require-description": [
 			"warn",
 			{
-				"ignore": ["eslint-enable"]
-			}
-		],
-		"eslint-plugin/require-meta-docs-description": "error",
-		"eslint-plugin/require-meta-docs-url": "error",
-		"func-style": [
-			"error",
-			"declaration",
-			{
-				"allowArrowFunctions": true
+				"ignore": ["eslint", "eslint-enable"]
 			}
 		],
 		"import/first": "error",
@@ -408,70 +452,45 @@
 					["internal", "parent", "sibling", "index"],
 					"object"
 				],
-				"newlines-between": "always"
-			}
-		],
-		"no-alert": "error",
-		"no-case-declarations": "off",
-		"no-console": "error",
-		"no-empty": "error",
-		"no-extra-semi": "error",
-		"no-mixed-spaces-and-tabs": "off",
-		"no-restricted-imports": [
-			"error",
-			{
-				"patterns": [
+				"newlines-between": "always",
+				"pathGroups": [
 					{
-						"group": ["*.spec"],
-						"message": "Test files must not be imported in other files (at least not app code)."
+						"group": "external",
+						"pattern": "@nna/**",
+						"position": "after"
+					},
+					{
+						"group": "external",
+						"pattern": "~/**",
+						"position": "after"
 					}
 				]
 			}
 		],
+		"no-alert": "error",
+		"no-console": "error",
+		"no-empty": "error",
 		"no-return-await": "error",
-		"no-trailing-spaces": "error",
-		"no-unused-expressions": "error",
-		"no-unused-labels": "error",
-		"no-use-before-define": "error",
-		"no-var": "error",
-		"object-curly-spacing": [
-			"error",
-			"always",
-			{
-				"objectsInObjects": true
-			}
-		],
-		"object-property-newline": [
-			"warn",
-			{
-				"allowAllPropertiesOnSameLine": true
-			}
-		],
 		"prefer-const": "error",
 		"prefer-rest-params": "error",
 		"prefer-template": "error",
 		"prettier/prettier": "error",
-		"quotes": [
-			"error",
-			"double",
-			{
-				"allowTemplateLiterals": true,
-				"avoidEscape": true
-			}
-		],
 		"sort-destructure-keys/sort-destructure-keys": "error",
-		"sort-keys": [
-			"error",
-			"asc",
-			{
-				"allowLineSeparatedGroups": true
-			}
-		],
 		"sort-keys-plus/sort-keys": [
 			"error",
 			"asc",
 			{
 				"allowLineSeparatedGroups": true
+			}
+		],
+		"sort-vars": "error",
+		"unused-imports/no-unused-imports": "error",
+		"unused-imports/no-unused-vars": [
+			"warn",
+			{
+				"args": "after-used",
+				"argsIgnorePattern": "^_",
+				"varsIgnorePattern": "^_\\d*"
 			}
 		]
 	}

@@ -19,7 +19,7 @@ export function splitString(string: string, regexp: RegExp): SplitStringPart[] {
 	const splitParts = (matches: RegExpMatchArray[], index: number): SplitStringPart[] => {
 		if (!matches.length) {
 			// No more matches, can have a remaining string
-			return string.length > index
+			return index < string.length
 				? [{ content: string.slice(index), index, separator: false }]
 				: [];
 		}
