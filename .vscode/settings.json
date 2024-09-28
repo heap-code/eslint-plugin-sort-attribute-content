@@ -1,13 +1,29 @@
 {
+	"cSpell.words": ["styleguide"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit"
 	},
-	"emeraldwalk.runonsave": {
-		"commands": [
-			{
-				"cmd": "npx eslint --fix ${file}",
-				"match": ".*\\.[ts|js|json|md|yml]"
-			}
-		]
-	}
+	"eslint.onIgnoredFiles": "warn",
+	"eslint.validate": [
+		"dockerfile",
+		"github-actions-workflow",
+		"handlebars",
+		"html",
+		"javascript",
+		"javascriptreact",
+		"json",
+		"markdown",
+		"typescript",
+		"typescriptreact",
+		"vue",
+		"yaml"
+	],
+	"files.associations": {
+		// Supposition: some files are ignored (e.g.: tsconfig.json) in the eslint plugin
+		// Doing this, "force" them to be considered
+		"*.json": "json",
+		"*.yaml": "yaml",
+		"*.yml": "yaml"
+	},
+	"typescript.preferences.importModuleSpecifier": "project-relative"
 }
