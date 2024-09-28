@@ -32,14 +32,14 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 		 * @param string the string to escape
 		 * @returns the escaped string
 		 */
-		const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+		const escapeRegExp = (string: string) => string.replace(/[$()*+.?[\\\]^{|}]/g, "\\$&");
 
 		/**
 		 * @param regex the string
 		 * @returns if the given string is a regex
 		 */
 		const isRegExpString = (regex: string) =>
-			regex.length > 1 && [regex[0], regex[regex.length - 1]].every(char => char === "/");
+			1 < regex.length && [regex[0], regex[regex.length - 1]].every(char => char === "/");
 
 		const ruleOptions = getOptionsWithDefaults(
 			(context.options as [SortAttributeContentOptions])[0],
@@ -100,7 +100,7 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 				({ content }, i) => i !== 0 && sorter(content, toSort[i - 1].content) < 0,
 			);
 
-			if (diffIndex > 0) {
+			if (0 < diffIndex) {
 				const { attribute, loc, range } = nodeInfo;
 
 				const intruder = values[diffIndex];

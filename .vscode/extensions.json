@@ -1,7 +1,3 @@
 {
-	"recommendations": [
-		"firsttris.vscode-jest-runner",
-		"dbaeumer.vscode-eslint",
-		"emeraldwalk.runonsave"
-	]
+	"recommendations": ["github.codespaces", "ms-vscode-remote.remote-containers"]
 }
