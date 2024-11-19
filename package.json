@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@angular-eslint/template-parser": "^18.0.0",
 		"@angular-eslint/utils": "^18.0.0",
-		"@angular/compiler": "^18.0.0",
+		"@angular/compiler": "^19.0.0",
 		"@cspell/eslint-plugin": "^6.31.1",
 		"@html-eslint/parser": "^0.27.0",
 		"@release-it/conventional-changelog": "^9.0.0",
