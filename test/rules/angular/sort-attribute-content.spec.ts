@@ -1,18 +1,16 @@
-import { type TSESLint } from "@typescript-eslint/utils";
-import { RuleTester } from "eslint";
+import { parseForESLint } from "@angular-eslint/template-parser";
+import { RuleTester, RunTests } from "@typescript-eslint/rule-tester";
 
 import {
 	SORT_ATTRIBUTE_CONTENT_NAME,
 	SortAttributeContentMessagesId,
 	SortAttributeContentOptions,
-	sortAttributeContentRule,
 } from "../../../src/rules";
+import { rule, toParser } from "../../tester";
 
-new RuleTester({
-	parser: require.resolve("@angular-eslint/template-parser"),
-} satisfies TSESLint.RuleTesterConfig).run(
+new RuleTester({ languageOptions: { parser: toParser(parseForESLint) } }).run(
 	`[Angular] ${SORT_ATTRIBUTE_CONTENT_NAME}`,
-	sortAttributeContentRule,
+	rule,
 	{
 		valid: [
 			{
@@ -158,5 +156,5 @@ new RuleTester({
 				output: `<div class="B-D||a--c" (click)="open()"></div>`,
 			},
 		],
-	} satisfies TSESLint.RunTests<SortAttributeContentMessagesId, [SortAttributeContentOptions]>,
+	} satisfies RunTests<SortAttributeContentMessagesId, [SortAttributeContentOptions]>,
 );

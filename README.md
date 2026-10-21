@@ -26,36 +26,49 @@ npm i --save-dev eslint-plugin-sort-attribute-content
 
 ## Usage
 
-A parser must be set to use this plugin:
+> Supported ESLint versions: `^8.57.0 || ^9.0.0 || ^10.0.0`.
 
-```json
-{
-  "parser": "@html-eslint/parser"
-}
+With the [flat configuration](https://eslint.org/docs/latest/use/configure/configuration-files)
+(`eslint.config.js`, default since ESLint 9 and the only format of ESLint 10),
+a parser must be set, then the plugin and its rule can be enabled:
+
+```js
+import htmlParser from "@html-eslint/parser";
+import sortAttributeContent from "eslint-plugin-sort-attribute-content";
+
+export default [
+  {
+    files: ["**/*.html"],
+    languageOptions: { parser: htmlParser },
+    plugins: { "sort-attribute-content": sortAttributeContent },
+    rules: {
+      "sort-attribute-content/sort-attribute-content": ["error", [{ attributes: "class" }]],
+    },
+  },
+];
 ```
 
 > Go to the [parsers section](#parsers) to display the list of available parsers.
 
-The plugin can then be activated by adding `sort-attribute-content` to the `plugins` property:
+<details>
+<summary>Legacy configuration (<code>.eslintrc</code>, ESLint 8)</summary>
 
 ```json
 {
-  "plugins": ["sort-attribute-content"]
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "parser": "@html-eslint/parser",
+      "plugins": ["sort-attribute-content"],
+      "rules": {
+        "sort-attribute-content/sort-attribute-content": ["error", [{ "attributes": "class" }]]
+      }
+    }
+  ]
 }
 ```
 
-The rule can be defined as follows:
-
-```json
-{
-  "rules": {
-    "sort-attribute-content/sort-attribute-content": ["error", { "attributes": "class" }]
-  }
-}
-```
-
-> All this configuration can be done on a `override` section:
-> <https://eslint.org/docs/latest/use/configure/configuration-files#how-do-overrides-work>
+</details>
 
 ### Parsers
 
@@ -73,10 +86,10 @@ npm i -D @html-eslint/parser
 
 Then set in the configuration file:
 
-```json
-{
-  "parser": "@html-eslint/parser"
-}
+```js
+import htmlParser from "@html-eslint/parser";
+
+export default [{ files: ["**/*.html"], languageOptions: { parser: htmlParser } }];
 ```
 
 #### Angular
@@ -91,10 +104,10 @@ npm i -D @angular-eslint/template-parser
 
 Then set in the configuration file:
 
-```json
-{
-  "parser": "@angular-eslint/template-parser"
-}
+```js
+import angularTemplateParser from "@angular-eslint/template-parser";
+
+export default [{ files: ["**/*.html"], languageOptions: { parser: angularTemplateParser } }];
 ```
 
 > **Note**:  
@@ -108,10 +121,10 @@ Then set in the configuration file:
 #### React
 
 This plugin can be used with the [React library](https://react.dev/).  
-ESLint must first be configured to read React.  
-> [How to configure?](https://github.com/jsx-eslint/eslint-plugin-react#configuration-legacy-eslintrc-)
+ESLint must first be configured to read React (JSX).  
+> [How to configure?](https://github.com/jsx-eslint/eslint-plugin-react#flat-configs)
 
-Once enabled, it will work on `jsx` and `tsx` files.
+Once enabled, it will work on any file containing JSX.
 
 > Do not forget to set the [typescript parser](https://typescript-eslint.io/packages/parser/)
 > for `tsx` files.
@@ -119,30 +132,28 @@ Once enabled, it will work on `jsx` and `tsx` files.
 > Install:
 >
 > ```bash
-> npm i -D @typescript-eslint/parser
-> ```
->
-> Then set in the configuration file:
->
-> ```json
-> {
->   "parser": "@typescript-eslint/parser"
-> }
+> npm i -D typescript-eslint
 > ```
 
 It might be useful to enable the rule only on these files:
 
-```json
-{
-  "overrides": [
-    {
-      "files": ["*.jsx", "*.tsx"],
-      "rules": {
-        "sort-attribute-content/sort-attribute-content": ["error", { "attributes": "className" }]
-      }
-    }
-  ]
-}
+```js
+import sortAttributeContent from "eslint-plugin-sort-attribute-content";
+import tseslint from "typescript-eslint";
+
+export default [
+  {
+    files: ["**/*.jsx", "**/*.tsx"],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: { ecmaFeatures: { jsx: true } },
+    },
+    plugins: { "sort-attribute-content": sortAttributeContent },
+    rules: {
+      "sort-attribute-content/sort-attribute-content": ["error", [{ attributes: "className" }]],
+    },
+  },
+];
 ```
 
 > **Note**:  
@@ -167,4 +178,4 @@ It might be useful to enable the rule only on these files:
 
 ## Releases
 
-See information about breaking changes and release notes [here](https://github.com/heap-code/eslint-plugin-sort-attribute-content/blob/HEAD/CHANGELOG.md).
+See information about breaking changes and release notes in the [CHANGELOG](https://github.com/heap-code/eslint-plugin-sort-attribute-content/blob/HEAD/CHANGELOG.md).

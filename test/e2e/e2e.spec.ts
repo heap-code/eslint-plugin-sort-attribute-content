@@ -8,17 +8,19 @@ import {
 } from "../../src/rules";
 
 describe("e2e", () => {
-	const parser = "@html-eslint/parser";
-	const linter = new Linter();
-
-	linter.defineParser(parser, { parseForESLint: parseForESLint as never });
-	linter.defineRule(SORT_ATTRIBUTE_CONTENT_NAME, sortAttributeContentRule);
+	// The flat config is the default since ESLint 9, but must be explicitly set with ESLint 8
+	const linter = new Linter({ configType: "flat" });
 
 	const verify = (options: SortAttributeContentOptions) =>
 		linter.verify("<div></div>", {
-			parser,
+			languageOptions: { parser: { parseForESLint: parseForESLint as never } },
+			plugins: {
+				"sort-attribute-content": {
+					rules: { [SORT_ATTRIBUTE_CONTENT_NAME]: sortAttributeContentRule },
+				},
+			},
 			rules: {
-				[SORT_ATTRIBUTE_CONTENT_NAME]: ["error", options],
+				[`sort-attribute-content/${SORT_ATTRIBUTE_CONTENT_NAME}`]: ["error", options],
 			},
 		});
 
