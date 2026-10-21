@@ -8,12 +8,16 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   checks:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x, 24.x, 26.x]
 
     steps:
       - uses: actions/checkout@v7
@@ -36,5 +40,33 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Tests
         run: npm run test:coverage -- --ci
+
+  # The repository is linted with the latest ESLint, but the rule must work with all supported versions
+  eslint-compat:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        eslint-version: [8, 9, 10]
+
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: "npm"
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Install ESLint v${{ matrix.eslint-version }}
+        run: npm install --no-save --legacy-peer-deps eslint@^${{ matrix.eslint-version }}
+
+      - name: Tests
+        run: npm run test -- --ci

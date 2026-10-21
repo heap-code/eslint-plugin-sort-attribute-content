@@ -13,9 +13,8 @@ export default {
 	transform: {
 		"^.+\\.[tj]s$": [
 			"ts-jest",
-			{
-				tsconfig: "<rootDir>/tsconfig.spec.json",
-			},
+			// Type-checking is done by `npm run typecheck` (the tests also run with other ESLint versions)
+			{ diagnostics: { exclude: ["**"] }, tsconfig: "<rootDir>/tsconfig.spec.json" },
 		],
 	},
 	transformIgnorePatterns: ["node_modules/(?!.*\\.mjs$)"],

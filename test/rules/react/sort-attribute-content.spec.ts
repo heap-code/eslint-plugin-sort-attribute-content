@@ -1,12 +1,11 @@
-import { TSESLint } from "@typescript-eslint/utils";
-import { RuleTester } from "eslint";
+import { RuleTester, RunTests } from "@typescript-eslint/rule-tester";
 
 import {
 	SORT_ATTRIBUTE_CONTENT_NAME,
 	SortAttributeContentMessagesId,
 	SortAttributeContentOptions,
-	sortAttributeContentRule,
 } from "../../../src/rules";
+import { rule } from "../../tester";
 
 const getReactTests = (typescript: boolean) => {
 	const wrapReact = (html: string) =>
@@ -173,26 +172,24 @@ ${html}
 				output: wrapReact(`<div className="B-D||a--c">text</div>`),
 			},
 		],
-	} satisfies TSESLint.RunTests<SortAttributeContentMessagesId, [SortAttributeContentOptions]>;
+	} satisfies RunTests<SortAttributeContentMessagesId, [SortAttributeContentOptions]>;
 };
 
 for (const typescript of [false, true]) {
 	const tests = getReactTests(typescript);
 	const filename = `file.${typescript ? "t" : "j"}sx`;
 
+	// `@typescript-eslint/parser` (default of the tester) is used for both JS and TS
 	new RuleTester({
-		parser: typescript && require.resolve("@typescript-eslint/parser"),
-		parserOptions: {
-			ecmaFeatures: {
-				jsx: true,
+		languageOptions: {
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+				},
 			},
 		},
-	}).run(
-		`[React ${typescript ? "t" : "j"}sx] ${SORT_ATTRIBUTE_CONTENT_NAME}`,
-		sortAttributeContentRule,
-		{
-			invalid: tests.invalid.map(test => ({ ...test, filename })),
-			valid: tests.valid.map(test => ({ ...test, filename })),
-		},
-	);
+	}).run(`[React ${typescript ? "t" : "j"}sx] ${SORT_ATTRIBUTE_CONTENT_NAME}`, rule, {
+		invalid: tests.invalid.map(test => ({ ...test, filename })),
+		valid: tests.valid.map(test => ({ ...test, filename })),
+	});
 }

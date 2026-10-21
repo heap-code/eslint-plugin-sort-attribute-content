@@ -150,12 +150,13 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			}
 		}
 
-		const { filename, parserPath = "" } = context;
+		// `context.parserPath` and `context.parserServices` do not exist with the flat config (ESLint >= 9)
+		const parserServices = context.sourceCode.parserServices as
+			Partial<TemplateParserServices> | undefined;
 
-		// TODO: a better way to determine the parser?
-		// React parser
-		if (parserPath.includes("@angular-eslint/template-parser")) {
-			const { convertNodeSourceSpanToLoc } = context.parserServices as TemplateParserServices;
+		// Angular parser
+		if (typeof parserServices?.convertNodeSourceSpanToLoc === "function") {
+			const { convertNodeSourceSpanToLoc } = parserServices as TemplateParserServices;
 
 			return Object.fromEntries(
 				ruleOptions.map(({ attributes, ...option }) => [
@@ -178,55 +179,13 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 			);
 		}
 
-		// React framework
-		if (filename.endsWith("jsx") || filename.endsWith("tsx")) {
-			return {
-				JSXAttribute(node) {
-					const { name, value } = node;
-
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- the use of the enum would make the library a required dependency
-					if (name.type !== "JSXIdentifier" || value?.type !== "Literal") {
-						return;
-					}
-
-					const attribute = name.name;
-					const attrValue = value.value;
-					if (typeof attrValue !== "string") {
-						return;
-					}
-
-					const option = ruleOptions.find(({ attributes }) =>
-						attributes.includes(attribute),
-					);
-
-					if (option) {
-						const {
-							loc,
-							range: [x, y],
-						} = value;
-
-						checkRule(attrValue, option, {
-							attribute,
-							loc,
-							// Remove the `"` from both sides
-							range: [x + 1, y - 1],
-						});
-					}
-				},
-			} satisfies TSESLint.RuleListener as never;
-		}
-
-		// Default choice, use of the `@html-eslint/parser` with dynamic modules.
-
-		// Throw an error if the module does not exist
-		require("@html-eslint/parser");
-		// eslint-disable-next-line @typescript-eslint/no-var-requires -- Dynamic loading
-		const { TokenTypes } = require("es-html-parser") as typeof import("es-html-parser");
-
+		// React (JSX) and `@html-eslint/parser`:
+		// each listener is only called when its node type exists in the parsed AST.
 		type HtmlNode<T, P = never> = T & { parent?: HtmlNode<P> };
 		return {
-			[TokenTypes.AttributeValue](nodeRaw: Rule.Node) {
-				const node = nodeRaw as unknown as HtmlNode<AttributeValueNode, AttributeNode>;
+			// Value of `TokenTypes.AttributeValue` from `es-html-parser` (not imported to keep the parser optional)
+			AttributeValue(nodeRaw: unknown) {
+				const node = nodeRaw as HtmlNode<AttributeValueNode, AttributeNode>;
 
 				const attributeName = node.parent?.key.value;
 				if (!attributeName) {
@@ -244,9 +203,41 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 					});
 				}
 			},
-		};
+			JSXAttribute(node) {
+				const { name, value } = node;
+
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- the use of the enum would make the library a required dependency
+				if (name.type !== "JSXIdentifier" || value?.type !== "Literal") {
+					return;
+				}
+
+				const attribute = name.name;
+				const attrValue = value.value;
+				if (typeof attrValue !== "string") {
+					return;
+				}
+
+				const option = ruleOptions.find(({ attributes }) => attributes.includes(attribute));
+
+				if (option) {
+					const {
+						loc,
+						range: [x, y],
+					} = value;
+
+					checkRule(attrValue, option, {
+						attribute,
+						loc,
+						// Remove the `"` from both sides
+						range: [x + 1, y - 1],
+					});
+				}
+			},
+		} satisfies TSESLint.RuleListener as never;
 	},
 	meta: {
+		// As documented; only applied by ESLint >= 9.15 (and replaced by any user-defined options)
+		defaultOptions: [[{ attributes: "class" }] satisfies SortAttributeContentOptions],
 		docs: {
 			description: "enforce the order of the content of HTML attributes",
 			recommended: false,
@@ -257,5 +248,4 @@ export const sortAttributeContentRule: Rule.RuleModule = {
 		schema: [schema],
 		type: "layout",
 	},
-	schema: [schema],
 };
