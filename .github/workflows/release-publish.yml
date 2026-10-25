@@ -33,14 +33,14 @@ jobs:
         run: npm run test:coverage -- --ci --coverageReporters json-summary
 
       - name: Generating coverage badges
-        uses: jpb06/jest-badges-action@latest
+        uses: jpb06/coverage-badges-action@v1.4.11
         with:
           coverage-summary-path: ./coverage/coverage-summary.json
           no-commit: true
           output-folder: ./.badges/code/
 
       - name: Set default code coverage badge
-        run: cp .badges/code/coverage-jest\ coverage.svg .badges/code/coverage.svg
+        run: cp .badges/code/coverage-total.svg .badges/code/coverage.svg
 
       - name: Set git config
         run: |
