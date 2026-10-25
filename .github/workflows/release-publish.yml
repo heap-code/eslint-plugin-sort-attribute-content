@@ -5,15 +5,16 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+  id-token: write # Required for OIDC
+
 jobs:
   job:
     # Ignore the heap-code bot commits and devDependencies
     if: ${{ github.actor != vars.HC_BOT && !(github.actor == 'renovate[bot]' && contains(github.event.head_commit.message, 'chore(deps):')) }}
 
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.HC_TOKEN }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
       - uses: actions/checkout@v7
@@ -23,8 +24,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: 24.x
           cache: "npm"
+          node-version: 24.x
+          registry-url: https://registry.npmjs.org/
 
       - name: Install packages
         run: npm ci
@@ -33,14 +35,14 @@ jobs:
         run: npm run test:coverage -- --ci --coverageReporters json-summary
 
       - name: Generating coverage badges
-        uses: jpb06/jest-badges-action@latest
+        uses: jpb06/coverage-badges-action@v1.4.11
         with:
           coverage-summary-path: ./coverage/coverage-summary.json
           no-commit: true
           output-folder: ./.badges/code/
 
       - name: Set default code coverage badge
-        run: cp .badges/code/coverage-jest\ coverage.svg .badges/code/coverage.svg
+        run: cp .badges/code/coverage-total.svg .badges/code/coverage.svg
 
       - name: Set git config
         run: |
@@ -56,8 +58,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Set npm config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-
       - name: Release and publish
         run: npx release-it --ci --no-git.requireCleanWorkingDir
+        env:
+          # https://github.com/release-it/release-it/blob/HEAD/docs/npm.md#trusted-publishing-oidc
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
